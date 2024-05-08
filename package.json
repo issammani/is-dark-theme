@@ -10,8 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pixelmatch": "^5.3.0",
-    "playwright": "^1.42.1",
-    "pngjs": "^7.0.0"
+    "node-resemble-js": "^0.2.0",
+    "playwright": "^1.42.1"
   }
 }
