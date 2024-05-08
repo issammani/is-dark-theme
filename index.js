@@ -44,12 +44,21 @@ async function checkWebsiteThemeSupport(websiteName, colorScheme, screenshots, p
 function writeResultsToCSV(results) {
   const csvPath = path.join(__dirname, "website_theme_support.csv");
   const csvHeader =
-    "Website,Screenshots Match, DM Detected in System DM, DM Detected in System LM \n";
+    "Website,Screenshots Match, DM Detected in System DM, DM Detected in System LM, Expected\n";
   const csvContent = results
-    .map(
-      (result) =>
-        `${result.website},${result.screenshotsMatch},${result.isDarkModeDetectedInDarkMode},${result.isDarkModeDetectedInLightMode} `
-    )
+    .map((result) => {
+      // Implementing the detailed check for expected outcomes
+      const expectedOutcome =
+        (result.screenshotsMatch === "Yes" &&
+          result.isDarkModeDetectedInDarkMode === "No" &&
+          result.isDarkModeDetectedInLightMode === "No") ||
+        (result.screenshotsMatch === "No" &&
+          result.isDarkModeDetectedInDarkMode === "Yes" &&
+          result.isDarkModeDetectedInLightMode === "No")
+          ? "✅"
+          : "❌";
+      return `${result.website},${result.screenshotsMatch},${result.isDarkModeDetectedInDarkMode},${result.isDarkModeDetectedInLightMode},${expectedOutcome}`;
+    })
     .join("\n");
 
   fs.writeFileSync(csvPath, csvHeader + csvContent);
