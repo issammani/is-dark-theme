@@ -1,0 +1,67 @@
+name: Update README
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: Install python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas
+
+      - name: Run script to generate CSV and screenshots
+        run: npm test
+
+      - name: Upload screenshots as artifacts
+        uses: actions/upload-artifact@v4
+        id: upload-screenshots
+        with:
+          name: screenshots
+          path: screenshots/
+
+      - name: Upload CSV as an artifact
+        uses: actions/upload-artifact@v4
+        id: upload-csv
+        with:
+          name: csv-data
+          path: website_theme_support.csv
+
+      - name: Convert CSV to Markdown table
+        id: csv_to_md
+        run: |
+          python -c "import pandas as pd
+          df = pd.read_csv('path/to/generated/data.csv')
+          markdown_table = df.to_markdown(index=False)
+          print('::set-output name=table::' + markdown_table)"
+
+      - name: Update README
+        run: |
+          echo -e "## Data Table\n\n${{ steps.csv_to_md.outputs.table }}" > DATA_TABLE.md
+          echo -e "## Screenshots\n\nScreenshots available [here](${{ steps.upload-screenshots.outputs.browser-download-url }})." >> DATA_TABLE.md
+          cat README.md DATA_TABLE.md > NEW_README.md
+          mv NEW_README.md README.md
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'Issam Mani'
+          git config --global user.email 'issamouu69@gmail.com'
+          git add README.md
+          git commit -m 'Update README with latest data and screenshots'
+          git push
