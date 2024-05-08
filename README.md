@@ -31,9 +31,9 @@ Visualizations of the theme detection can be viewed through the following links:
    npm i
    ```
 3. Run the test
-   `bash
- npm test
- `
+   ```bash
+   npm test
+   ```
    This will take a bit of time, but after it's finished, a `screenshot` folder will be generated with screenshots of the websites in dark and light modes. `website_theme_support.csv` will also be generated and contain an analysis about that run.
 
 ## GitHub Actions Workflow
