@@ -6,9 +6,4 @@
 
 is-dark-theme is utility to help investigate the feasibility of detecting pages in dark mode.
 
-## TODOS
-
-- Infer if a page is in dark or light mode from markup.
-- Determine if a color scheme is dark or light
-- Support for various color formats (hex, RGB, HSL)
-- Run tests against webpages with both dark and light mode variants.
+We check the computed background color and compute the perceived brightness to determine if the color is dark or light.

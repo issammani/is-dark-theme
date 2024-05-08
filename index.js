@@ -29,20 +29,22 @@ const launchBrowser = async ({ colorScheme } = { colorScheme: "dark" }) => {
 };
 
 async function checkWebsiteThemeSupport(websiteName, colorScheme, screenshots, page) {
-  screenshots[colorScheme] = await takeScreenshot(page, websiteName, colorScheme);
+  screenshots[websiteName] = screenshots[websiteName] || {};
+  screenshots[websiteName][colorScheme] = await takeScreenshot(page, websiteName, colorScheme);
   await injectLibrary(page, "./isDarkMode.js");
   const isDarkModeDetected = await page.evaluate(() => isPageInDarkMode());
 
   if (colorScheme === "light") {
-    screenshots["darkThemeDetectedInLightMode"] = isDarkModeDetected ? "Yes" : "No";
+    screenshots[websiteName]["darkThemeDetectedInLightMode"] = isDarkModeDetected ? "Yes" : "No";
   } else if (colorScheme === "dark") {
-    screenshots["darkThemeDetectedInDarkMode"] = isDarkModeDetected ? "Yes" : "No";
+    screenshots[websiteName]["darkThemeDetectedInDarkMode"] = isDarkModeDetected ? "Yes" : "No";
   }
 }
 
 function writeResultsToCSV(results) {
   const csvPath = path.join(__dirname, "website_theme_support.csv");
-  const csvHeader = "Website,Screenshots Match, Detected ( DM ), Detected ( LM ) \n";
+  const csvHeader =
+    "Website,Screenshots Match, DM Detected in System DM, DM Detected in System LM \n";
   const csvContent = results
     .map(
       (result) =>
@@ -75,18 +77,18 @@ async function takeScreenshot(page, websiteName, theme) {
 const checkWebsites = async () => {
   const websites = [
     "https://duckduckgo.com",
+    "https://reddit.com",
+    "https://openai.com/",
+    "https://docs.github.com/en",
+    "https://twitter.com",
+    "https://cnn.com",
+    "https://google.com",
     "https://playwright.dev/",
     "https://docs.amplify.aws/",
     "https://usehooks-ts.com/",
     "https://picocss.com/",
     "https://nextjs.org/",
     "https://hurl.dev/",
-    "https://chat.openai.com",
-    "https://docs.github.com/en",
-    "https://twitter.com",
-    "https://dev.to",
-    "https://cnn.com",
-    "https://google.com",
     "https://joshwcomeau.com",
   ];
 
@@ -105,12 +107,13 @@ const checkWebsites = async () => {
   }
 
   for (const website of websites) {
-    const compare = await compareScreenshots(screenshots);
+    const websiteName = new URL(website).hostname.replace("www.", "");
+    const compare = await compareScreenshots(screenshots[websiteName]);
     results.push({
       website,
       screenshotsMatch: compare ? "Yes" : "No",
-      isDarkModeDetectedInLightMode: screenshots.darkThemeDetectedInLightMode,
-      isDarkModeDetectedInDarkMode: screenshots.darkThemeDetectedInDarkMode,
+      isDarkModeDetectedInLightMode: screenshots[websiteName].darkThemeDetectedInLightMode,
+      isDarkModeDetectedInDarkMode: screenshots[websiteName].darkThemeDetectedInDarkMode,
     });
   }
 

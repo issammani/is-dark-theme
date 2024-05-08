@@ -1,5 +1,3 @@
-const canvasContext = document.createElement("canvas").getContext("2d");
-
 const rgbToLuminance = (r, g, b) => {
   const normalized = [r, g, b].map(function (channel) {
     channel /= 255;
@@ -9,30 +7,51 @@ const rgbToLuminance = (r, g, b) => {
 };
 
 const colorToRgb = (color) => {
+  const canvasContext = document.createElement("canvas").getContext("2d");
   canvasContext.fillStyle = color;
   canvasContext.fillRect(0, 0, 1, 1);
-  const [r, g, b] = canvasContext.getImageData(0, 0, 1, 1).data;
-  return [r, g, b];
+  const foo = canvasContext.getImageData(0, 0, 1, 1).data;
+  return [...foo];
 };
 
+const colorsMatch = (color1, color2, compareAlpha = false) => {
+  const [r1, g1, b1, a1] = colorToRgb(color1);
+  const [r2, g2, b2, a2] = colorToRgb(color2);
+
+  if (compareAlpha && a1 !== a2) {
+    return false;
+  }
+
+  return r1 === r2 && g1 === g2 && b1 === b2;
+};
+
+const isTransparent = (color) => colorToRgb(color).at(-1) === 0;
+
 const isPageInDarkMode = () => {
-  const isDarkColorScheme = getComputedStyle(document.body).colorScheme === "dark";
-  const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const colorScheme = () => getComputedStyle(document.body).colorScheme;
+  // const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  let backgroundColor = getComputedStyle(document.body).backgroundColor;
+  const documentElementBgColor = getComputedStyle(document.documentElement).backgroundColor;
 
-  const bodyBgColor = getComputedStyle(document.body).backgroundColor;
-  const bodyBgluminance = rgbToLuminance(...colorToRgb(bodyBgColor));
+  if (isTransparent(backgroundColor) && !isTransparent(documentElementBgColor)) {
+    backgroundColor = documentElementBgColor;
+  } else if (isTransparent(backgroundColor) && isTransparent(documentElementBgColor)) {
+    backgroundColor = "white"; // Fallback to white if both are transparent.
+  }
 
-  const metaThemeColorContent = document.querySelector('meta[name="theme-color"]')?.content;
-  const metaBgluminance = metaThemeColorContent
-    ? rgbToLuminance(...colorToRgb(metaThemeColorContent))
-    : 1;
+  const backgroundColorluminance = rgbToLuminance(...colorToRgb(backgroundColor));
+
+  // const metaThemeColorContent = document.querySelector('meta[name="theme-color"]')?.content;
+  // const metaBgluminance = metaThemeColorContent
+  //   ? rgbToLuminance(...colorToRgb(metaThemeColorContent))
+  //   : -1;
+  return colorScheme() !== "light" && backgroundColorluminance < 0.5;
 
   // Decision logic.
   // The page is considered in dark mode if any of the following conditions are met:
   // 1. The color scheme is explicitly set to dark.
   // 2. The user prefers dark mode, and the body background luminance is low.
   // 3. The theme color's luminance is low (indicating a dark theme).
-  return isDarkColorScheme || (prefersDarkScheme && bodyBgluminance < 0.5) || metaBgluminance < 0.5;
 };
 
 // export { isPageInDarkMode };
