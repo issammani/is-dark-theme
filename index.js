@@ -4,7 +4,7 @@
 // check color-scheme meta tag
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color
 
-const { chromium } = require("playwright");
+const { webkit, devices } = require("playwright");
 const fs = require("fs");
 const path = require("path");
 const resemble = require("node-resemble-js");
@@ -15,11 +15,12 @@ const injectLibrary = async (page, path) => {
 };
 
 const launchBrowser = async ({ colorScheme } = { colorScheme: "dark" }) => {
-  const browser = await chromium.launch();
+  const browser = await webkit.launch({ timeout: 120000 });
   const context = await browser.newContext({
     bypassCSP: true, // We don't want our script to be blocked by CSP
     userAgent:
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.18 Safari/537.36",
+    ...devices["iPhone 15"],
   });
 
   const page = await context.newPage();
@@ -78,8 +79,7 @@ async function compareScreenshots({ light, dark }) {
 
 async function takeScreenshot(page, websiteName, theme) {
   const screenshotPath = path.join(__dirname, "screenshots", `${websiteName}-${theme}.png`);
-  await page.screenshot({ path: screenshotPath });
-  console.log(`Screenshot for ${theme} mode saved: ${screenshotPath}`);
+  await page.screenshot({ path: screenshotPath, timeout: 120000 });
   return screenshotPath;
 }
 
@@ -105,11 +105,14 @@ const checkWebsites = async () => {
   const screenshots = {};
   for (const colorScheme of ["light", "dark"]) {
     const { browser, page } = await launchBrowser({ colorScheme });
-    page.on("console", (msg) => console.log(msg.text()));
+    // This easily slows down the run because of console forwarding
+    // Only turn on to debug
+    // page.on("console", (msg) => console.log(msg.text()));
 
     for (const website of websites) {
       const websiteName = new URL(website).hostname.replace("www.", "");
-      await page.goto(website, { waitUntil: "domcontentloaded" });
+      page.setDefaultTimeout(120000);
+      await page.goto(website, { waitUntil: "domcontentloaded", timeout: 120000 });
       await checkWebsiteThemeSupport(websiteName, colorScheme, screenshots, page);
     }
     await browser.close();
