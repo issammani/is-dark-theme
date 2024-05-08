@@ -4,6 +4,38 @@
 
 ## Description
 
-is-dark-theme is utility to help investigate the feasibility of detecting pages in dark mode.
+is-dark-theme is a utility to help investigate the feasibility of detecting pages in dark mode. We check the computed background color and compute the perceived brightness to determine if the color is dark or light. This utility was developed to potentially be used for WKWebview based browsers.
 
-We check the computed background color and compute the perceived brightness to determine if the color is dark or light.
+<!-- ## Data and Visualizations
+
+Below is a table generated from the latest CSV data, showing examples of theme detection results:
+
+| URL                | Computed Background | Perceived Brightness | Is Dark? |
+| ------------------ | ------------------- | -------------------- | -------- |
+| `example.com`      | `#000000`           | Low                  | Yes      |
+| `another-site.com` | `#FFFFFF`           | High                 | No       |
+
+Visualizations of the theme detection can be viewed through the following links:
+
+- [View Screenshots](https://github.com/user/repo/actions/runs/123456/artifacts/789123) -->
+
+## How to Use
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/is-dark-theme.git
+   cd is-dark-theme
+   ```
+2. Install dependencies
+   ```bash
+   npm i
+   ```
+3. Run the test
+   `bash
+ npm test
+ `
+   This will take a bit of time, but after it's finished, a `screenshot` folder will be generated with screenshots of the websites in dark and light modes. `website_theme_support.csv` will also be generated and contain an analysis about that run.
+
+## GitHub Actions Workflow
+
+To enhance the functionality and documentation of `is-dark-theme`, a GitHub Actions workflow automates the generation of CSV data and screenshots that document the detection process in various scenarios.
