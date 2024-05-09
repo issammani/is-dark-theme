@@ -7,7 +7,7 @@ on:
 
 jobs:
   update-readme:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -20,8 +20,8 @@ jobs:
 
       - name: Install node dependencies
         run: |
-          npm ci
-          npx playwright install webkit
+          npm i
+          npx playwright install chromium
 
       - name: Install python dependencies
         run: |
@@ -49,7 +49,7 @@ jobs:
         id: csv_to_md
         run: |
           python -c "import pandas as pd
-          df = pd.read_csv('path/to/generated/data.csv')
+          df = pd.read_csv('./website_theme_support.csv')
           markdown_table = df.to_markdown(index=False)
           print('::set-output name=table::' + markdown_table)"
 

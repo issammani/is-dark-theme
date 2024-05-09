@@ -4,7 +4,7 @@
 // check color-scheme meta tag
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color
 
-const { webkit, devices } = require("playwright");
+const { chromium, devices } = require("playwright");
 const fs = require("fs");
 const path = require("path");
 const resemble = require("node-resemble-js");
@@ -15,7 +15,7 @@ const injectLibrary = async (page, path) => {
 };
 
 const launchBrowser = async ({ colorScheme } = { colorScheme: "dark" }) => {
-  const browser = await webkit.launch({ timeout: 120000 });
+  const browser = await chromium.launch({ timeout: 120000 });
   const context = await browser.newContext({
     bypassCSP: true, // We don't want our script to be blocked by CSP
     userAgent:
@@ -77,9 +77,17 @@ async function compareScreenshots({ light, dark }) {
   });
 }
 
+const timeoutWihtoutFailing = async (promise, timeout = 10000) =>
+  Promise.race([
+    new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    }),
+    promise,
+  ]);
+
 async function takeScreenshot(page, websiteName, theme) {
   const screenshotPath = path.join(__dirname, "screenshots", `${websiteName}-${theme}.png`);
-  await page.screenshot({ path: screenshotPath, timeout: 120000 });
+  await timeoutWihtoutFailing(page.screenshot({ path: screenshotPath, timeout: 120000 }));
   return screenshotPath;
 }
 
@@ -112,6 +120,11 @@ const checkWebsites = async () => {
     for (const website of websites) {
       const websiteName = new URL(website).hostname.replace("www.", "");
       page.setDefaultTimeout(120000);
+      // waitUntil: "domcontentloaded" fails on CI for some reason and timesout
+      // Instead let's wait for 10 seconds and proceed with the rest of the code
+      await timeoutWihtoutFailing(
+        page.goto(website, { waitUntil: "domcontentloaded", timeout: 120000 })
+      );
       await page.goto(website, { waitUntil: "domcontentloaded", timeout: 120000 });
       await checkWebsiteThemeSupport(websiteName, colorScheme, screenshots, page);
     }
