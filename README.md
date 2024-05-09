@@ -39,3 +39,25 @@ Visualizations of the theme detection can be viewed through the following links:
 ## GitHub Actions Workflow
 
 To enhance the functionality and documentation of `is-dark-theme`, a GitHub Actions workflow automates the generation of CSV data and screenshots that document the detection process in various scenarios.
+
+## Data Table
+
+| Website                    | Screenshots Match   |  DM Detected in System DM   |  DM Detected in System LM   |  Expected   |
+|:---------------------------|:--------------------|:----------------------------|:----------------------------|:------------|
+| https://duckduckgo.com     | No                  | Yes                         | No                          | ✅           |
+| https://reddit.com         | No                  | Yes                         | No                          | ✅           |
+| https://openai.com/        | No                  | Yes                         | No                          | ✅           |
+| https://docs.github.com/en | No                  | Yes                         | No                          | ✅           |
+| https://twitter.com        | No                  | Yes                         | No                          | ✅           |
+| https://cnn.com            | Yes                 | No                          | No                          | ✅           |
+| https://google.com         | Yes                 | No                          | No                          | ✅           |
+| https://playwright.dev/    | No                  | Yes                         | No                          | ✅           |
+| https://docs.amplify.aws/  | No                  | Yes                         | No                          | ✅           |
+| https://usehooks-ts.com/   | No                  | Yes                         | No                          | ✅           |
+| https://picocss.com/       | No                  | Yes                         | No                          | ✅           |
+| https://nextjs.org/        | No                  | Yes                         | No                          | ✅           |
+| https://hurl.dev/          | No                  | Yes                         | No                          | ✅           |
+| https://joshwcomeau.com    | No                  | Yes                         | No                          | ✅           |
+## Screenshots
+
+Screenshots available [here]().
