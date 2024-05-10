@@ -50,8 +50,8 @@ jobs:
           python -c "import pandas as pd
           df = pd.read_csv('./website_theme_support.csv')
           markdown_table = df.to_markdown(index=False)
-          data_table = '## Data Table\n\n' + markdown_table
-          screenshots_section = '## Screenshots\n\nScreenshots available [here](${{ steps.upload-screenshots.outputs.browser-download-url }}).'
+          data_table = '## Test Results (Auto generated)\n\n' + markdown_table
+          screenshots_section = '## Screenshots\n\nScreenshots available [here](${{ steps.upload-screenshots.outputs.artifact-url }}).'
           with open('DATA_TABLE.md', 'w') as f:
               f.write(data_table + '\n' + screenshots_section)
           with open('README.md', 'r') as f:
