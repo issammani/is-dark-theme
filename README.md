@@ -40,3 +40,25 @@ To enhance the functionality and documentation of `is-dark-theme`, a GitHub Acti
 - The `DM Detected in System DM` column shows if a dark themed website was detected when the system theme was set to dark.
 - The `DM Detected in System LM` column shows if a dark themed website was detected when the system theme was set to light.
 - The `Expected` shows whether the result for that website is expected or not.
+
+## Test Results (Auto generated)
+
+| Website                    | Screenshots Match   |  DM Detected in System DM   |  DM Detected in System LM   |  Expected   |
+|:---------------------------|:--------------------|:----------------------------|:----------------------------|:------------|
+| https://duckduckgo.com     | No                  | Yes                         | No                          | ✅           |
+| https://reddit.com         | No                  | Yes                         | No                          | ✅           |
+| https://openai.com/        | No                  | Yes                         | No                          | ✅           |
+| https://docs.github.com/en | No                  | Yes                         | No                          | ✅           |
+| https://twitter.com        | No                  | Yes                         | No                          | ✅           |
+| https://cnn.com            | No                  | No                          | No                          | ❌           |
+| https://google.com         | Yes                 | No                          | No                          | ✅           |
+| https://playwright.dev/    | No                  | Yes                         | No                          | ✅           |
+| https://docs.amplify.aws/  | No                  | Yes                         | No                          | ✅           |
+| https://usehooks-ts.com/   | No                  | Yes                         | No                          | ✅           |
+| https://picocss.com/       | No                  | Yes                         | No                          | ✅           |
+| https://nextjs.org/        | No                  | Yes                         | No                          | ✅           |
+| https://hurl.dev/          | No                  | Yes                         | No                          | ✅           |
+| https://joshwcomeau.com    | No                  | Yes                         | No                          | ✅           |
+## Screenshots
+
+Screenshots available [here](https://github.com/issammani/is-dark-theme/actions/runs/9039384544/artifacts/1492826417).
