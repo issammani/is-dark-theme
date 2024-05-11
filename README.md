@@ -42,4 +42,25 @@ To enhance the functionality and documentation of `is-dark-theme`, a GitHub Acti
 - The `Expected` shows whether the result for that website is expected or not.
 
 <!-- AUTO-GENERATED-CONTENT:START (DO_NOT_REMOVE) -->
+## Test Results (Auto generated)
+
+| Website                    | Screenshots Match   |  DM Detected in System DM   |  DM Detected in System LM   |  Expected   |
+|:---------------------------|:--------------------|:----------------------------|:----------------------------|:------------|
+| https://duckduckgo.com     | No                  | Yes                         | No                          | ✅           |
+| https://reddit.com         | No                  | Yes                         | No                          | ✅           |
+| https://openai.com/        | No                  | Yes                         | No                          | ✅           |
+| https://docs.github.com/en | No                  | Yes                         | No                          | ✅           |
+| https://twitter.com        | No                  | Yes                         | No                          | ✅           |
+| https://cnn.com            | Yes                 | No                          | No                          | ✅           |
+| https://google.com         | Yes                 | No                          | No                          | ✅           |
+| https://playwright.dev/    | No                  | Yes                         | No                          | ✅           |
+| https://docs.amplify.aws/  | No                  | Yes                         | No                          | ✅           |
+| https://usehooks-ts.com/   | No                  | Yes                         | No                          | ✅           |
+| https://picocss.com/       | No                  | Yes                         | No                          | ✅           |
+| https://nextjs.org/        | No                  | Yes                         | No                          | ✅           |
+| https://hurl.dev/          | No                  | Yes                         | No                          | ✅           |
+| https://joshwcomeau.com    | No                  | Yes                         | No                          | ✅           |
+## Screenshots
+
+Screenshots available [here](https://github.com/issammani/is-dark-theme/actions/runs/9039486553/artifacts/1492844437).
 <!-- AUTO-GENERATED-CONTENT:END -->
