@@ -52,14 +52,20 @@ jobs:
           markdown_table = df.to_markdown(index=False)
           data_table = '## Test Results (Auto generated)\n\n' + markdown_table
           screenshots_section = '## Screenshots\n\nScreenshots available [here](${{ steps.upload-screenshots.outputs.artifact-url }}).'
-          with open('DATA_TABLE.md', 'w') as f:
-              f.write(data_table + '\n' + screenshots_section)
+          full_insert = data_table + '\n' + screenshots_section
+
           with open('README.md', 'r') as f:
               readme_content = f.read()
-          with open('NEW_README.md', 'w') as f:
-              f.write(readme_content + '\n' + data_table + '\n' + screenshots_section)
+          start_marker = '<!-- AUTO-GENERATED-CONTENT:START (DO_NOT_REMOVE) -->'
+          end_marker = '<!-- AUTO-GENERATED-CONTENT:END -->'
+          start_pos = readme_content.find(start_marker) + len(start_marker)
+          end_pos = readme_content.find(end_marker)
+
+          updated_readme = readme_content[:start_pos] + '\n' + full_insert + '\n' + readme_content[end_pos:]
+
+          with open('README.md', 'w') as f:
+              f.write(updated_readme)
           "
-          mv NEW_README.md README.md
 
       - name: Commit and push changes
         run: |
